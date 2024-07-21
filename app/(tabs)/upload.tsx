@@ -9,7 +9,6 @@ import {
 } from "react-native";
 
 import { Fontisto } from "@expo/vector-icons";
-import { color } from "@rneui/themed/dist/config";
 
 export default function Upload() {
   return (

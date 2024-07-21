@@ -4,8 +4,6 @@ import { ScrollView } from "react-native-gesture-handler";
 export default function home() {
   return (
     <ScrollView style={styles.container}>
-      {/* <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 15 }}> Art Gallery </Text> */}
-
       <Image
         source={require("../../assets/images/3-removebg-preview.png")}
         style={{ height: 80, objectFit: "contain" }}

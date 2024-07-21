@@ -2,13 +2,7 @@ import AuthForm from "@/components/AuthForm";
 import { Text, StyleSheet, Pressable, Image, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { useContext, useEffect, useState } from "react";
-import {
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult,
-  onAuthStateChanged,
-} from "@firebase/auth";
+import { signInWithEmailAndPassword } from "@firebase/auth";
 import { AuthContext } from "@/Contexts/AuthContext";
 
 export default function Login() {
@@ -38,7 +32,7 @@ export default function Login() {
 
       <AuthForm title="Login" actionText="Login" action={signIn} />
       <Pressable style={styles.button} onPress={() => router.push("./signUp")}>
-        <Text style={styles.buttonText}> Sign Up</Text>
+        <Text style={styles.buttonText}> Sign up</Text>
       </Pressable>
     </ScrollView>
   );
@@ -46,7 +40,7 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#EAEAEA"
+    backgroundColor: "#EAEAEA",
   },
   button: {
     marginTop: 20,

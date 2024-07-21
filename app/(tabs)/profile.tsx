@@ -1,6 +1,21 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View, Pressable } from "react-native";
+import { signOut } from "@firebase/auth";
+import { useContext } from "react";
+import { AuthContext } from "@/Contexts/AuthContext";
+import { router, useRouter } from "expo-router";
 
 export default function Profile() {
+  const auth = useContext(AuthContext);
+  const router = useRouter()
+  const signout = () => {
+    signOut(auth).then(() => {
+      // Sign-out successful.
+      router.replace("/")
+    }).catch((error) => {
+      // An error happened.
+    });
+  }
+
   return (
     <ScrollView style={styles.container}>
       <Image
@@ -83,6 +98,9 @@ export default function Profile() {
           }}
         />
       </View>
+      <Pressable style={styles.button} onPress={signout}>
+        <Text style={styles.buttonText}> Sign out</Text>
+      </Pressable>
     </ScrollView>
   );
 }
@@ -129,5 +147,18 @@ const styles = StyleSheet.create({
     height: 125,
     width: 130,
     marginBottom: 10,
+  },
+  button: {
+    marginTop: 20,
+    backgroundColor: "#FF2E63",
+    marginHorizontal: 13,
+    paddingVertical: 15,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#efefef",
+    textAlign: "center",
+    padding: 8,
   },
 });

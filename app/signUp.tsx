@@ -1,7 +1,7 @@
 import AuthForm from "@/components/AuthForm"
 import { AuthContext } from "@/Contexts/AuthContext"
 import { useContext, useState } from "react"
-import { View, Text } from "react-native"
+import { Text, ScrollView } from "react-native"
 import { createUserWithEmailAndPassword, onAuthStateChanged } from "@firebase/auth"
 import { router } from "expo-router"
 
@@ -29,9 +29,9 @@ export default function SignUp(){
         }
     })
 return(
-<View>
+<ScrollView>
     <AuthForm title = "SignUp" actionText = "SignUp" action = {createAccount}/>
     <Text>{error && error}</Text>
-</View>
+</ScrollView>
 )
 }
