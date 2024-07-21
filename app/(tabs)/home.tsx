@@ -1,23 +1,15 @@
-import { Text, View, Pressable, StyleSheet } from "react-native";
-import { signOut } from "@firebase/auth";
-import { useContext } from "react";
-import { AuthContext } from "@/Contexts/AuthContext";
-import { useRouter } from "expo-router";
+import { Text, StyleSheet, Image } from "react-native";
 import Post from "@/components/Post";
 import { ScrollView } from "react-native-gesture-handler";
 export default function home() {
-  const router = useRouter();
-  //   const auth = useContext(AuthContext);
-
-  //   signOut(auth).then(() => {
-  //     router.replace('/index')
-  //   })
-  //   .catch((error) =>{
-  //     console.log((error.message))
-  //   })
   return (
     <ScrollView style={styles.container}>
-      <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 15 }}> Art Gallery </Text>
+      {/* <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 15 }}> Art Gallery </Text> */}
+
+      <Image
+        source={require("../../assets/images/3-removebg-preview.png")}
+        style={{ height: 80, objectFit: "contain" }}
+      />
       <Post
         username="William"
         caption="Digital art1"

@@ -4,6 +4,7 @@ import { firebaseConfig } from "@/Config/config";
 import { initializeApp } from "@firebase/app";
 import { getAuth } from "@firebase/auth";
 import { AuthContext } from "@/Contexts/AuthContext";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function RootLayout() {
   //  initialize firebase
@@ -14,9 +15,11 @@ export default function RootLayout() {
 
   return (
     <AuthContext.Provider value={FBauth}>
-      <SafeAreaView style={styles.container}>
-        <Stack screenOptions={{ headerShown: false }} />
-      </SafeAreaView>
+      <GestureHandlerRootView style={styles.container}>
+        <SafeAreaView style={styles.container}>
+          <Stack screenOptions={{ headerShown: false }} />
+        </SafeAreaView>
+      </GestureHandlerRootView>
     </AuthContext.Provider>
   );
 }

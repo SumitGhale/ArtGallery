@@ -2,8 +2,8 @@ import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
 export default function AuthForm(props: any) {
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("hello@mailinator.com");
+  const [password, setPassword] = useState("12345678");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [validInput, setInputAsValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -112,25 +112,30 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 100,
     padding: 20,
-    backgroundColor: "#bbbbbb",
+    backgroundColor: "#EAEAEA",
     borderRadius: 10,
   },
   title: {
-    fontSize: 18,
+    fontSize: 24,
+    fontWeight: "bold",
     textAlign: "center",
   },
   input: {
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    padding: 6,
+    backgroundColor: "white",
+    padding: 15,
+    marginHorizontal: 20,
     marginBottom: 20,
-    backgroundColor: "#efefef",
-    borderRadius: 6,
+    borderStyle: "solid",
+    borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 5,
   },
   button: {
-    backgroundColor: "black",
-    borderRadius: 4,
+    backgroundColor: "#FF2E63",
+    marginHorizontal: 13,
+    paddingVertical: 15,
+    borderRadius: 5,
+    alignItems: "center"
   },
   buttonText: {
     color: "#efefef",

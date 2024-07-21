@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   profileImage: {
     height: 40,
     width: 40,
-    objectFit: "contain"
+    objectFit: "cover"
   },
   userInfo: {
     flexDirection: "row",
