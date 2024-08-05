@@ -15,12 +15,10 @@ export default function ImageCard(props: any) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#EAEAEA",
-    width: 120,
     borderRadius: 5,
   },
   image: {
     height: 110,
-    width: 120,
   },
   artistInfo: {
     flexDirection: "row",

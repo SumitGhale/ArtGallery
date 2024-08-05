@@ -5,6 +5,8 @@ import { initializeApp } from "@firebase/app";
 import { getAuth } from "@firebase/auth";
 import { AuthContext } from "@/Contexts/AuthContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { getFirestore } from "@firebase/firestore";
+import { DBContext } from "@/Contexts/dbContext";
 
 export default function RootLayout() {
   //  initialize firebase
@@ -13,13 +15,18 @@ export default function RootLayout() {
   // initialize  firebase authentication
   const FBauth = getAuth(FBapp);
 
+  //initialise the database firestore
+  const FBdb = getFirestore(FBapp);
+
   return (
     <AuthContext.Provider value={FBauth}>
-      <GestureHandlerRootView style={styles.container}>
-        <SafeAreaView style={styles.container}>
-          <Stack screenOptions={{ headerShown: false }} />
-        </SafeAreaView>
-      </GestureHandlerRootView>
+      <DBContext.Provider value={FBdb}>
+        <GestureHandlerRootView style={styles.container}>
+          <SafeAreaView style={styles.container}>
+            <Stack screenOptions={{ headerShown: false }} />
+          </SafeAreaView>
+        </GestureHandlerRootView>
+      </DBContext.Provider>
     </AuthContext.Provider>
   );
 }

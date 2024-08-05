@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   },
   post: {
     height: 125,
-    width: 130,
+    width: 100,
     marginBottom: 10,
   },
   button: {

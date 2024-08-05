@@ -1,86 +1,109 @@
 import ImageCard from "@/components/ImageCards";
-import { useState } from "react";
-import { ScrollView, StyleSheet, View, TextInput } from "react-native";
-import { lightColors, SearchBar } from '@rneui/themed';
+import { useContext, useState, useEffect } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  TextInput,
+  FlatList,
+} from "react-native";
+import { lightColors, SearchBar } from "@rneui/themed";
+import { DBContext } from "@/Contexts/dbContext";
+import {
+  collection,
+  onSnapshot,
+  query,
+  QuerySnapshot,
+  where,
+} from "firebase/firestore";
 
 export default function search() {
-const [search, setSearch] = useState('');
+  const db = useContext(DBContext);
+
+  const [search, setSearch] = useState("");
+  const [data, setData] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (loaded == false) {
+      fetchData();
+      setLoaded(true);
+    }
+  }, []);
+
+  const fetchData = async () => {
+    const path = "posts"; //  path to the data in the database
+    const q = query(collection(db, path)); //  query passing db and path to the data
+    const unsub = onSnapshot(q, (querySnapshot) => {
+      let items: any = [];
+      querySnapshot.forEach((doc) => {
+        let item = doc.data();
+        item.id = doc.id;
+        items.push(item);
+      });
+      setData(items); //  setting data to the state items
+      console.log(items);
+    });
+  };
+
+
+  const getSearchedData = async() =>{
+    const path = "posts"; //  path to the data in the database
+    const q = query(collection(db, path), where("tags", "array-contains", search)); //  query passing db and path to the data
+
+    const unsub = onSnapshot(q, (querySnapshot) => {
+      let items: any = []
+      querySnapshot.forEach((doc) => {
+        let item = doc.data()
+        item.id = doc.id
+        items.push(item)
+      })
+      setData(items)
+    })
+  }
 
   const updateSearch = (search: string) => {
     setSearch(search);
   };
 
+  const ListItem = (porps: any) => {
+    return (
+      <View style={styles.itemWrapper}>
+        <ImageCard
+          artistName={porps.artistName}
+          artistImage="https://images.unsplash.com/photo-1492288991661-058aa541ff43?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          image={porps.postImage}
+        />
+      </View>
+    );
+  };
+
+  const renderItem = ({ item }: any) => {
+    return <ListItem artistName={item.userID} postImage={item.imageURL} />;
+  };
+
+  const Separator = () => {
+    return <View style={styles.separator}></View>;
+  };
+
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <SearchBar
         placeholder="Type Here..."
         onChangeText={updateSearch}
         value={search}
         lightTheme
+        onSubmitEditing={getSearchedData}
       />
-      <View style={styles.cardContainer}>
-        <ImageCard
-          artistName="Alex"
-          artistImage="https://images.unsplash.com/photo-1492288991661-058aa541ff43?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          image="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=2245&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-        <ImageCard
-          artistName="Chris"
-          artistImage="https://images.unsplash.com/photo-1579038773867-044c48829161?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          image="https://plus.unsplash.com/premium_photo-1711136314731-8c3fe1831672?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-        <ImageCard
-          artistName="Dany"
-          artistImage="https://images.unsplash.com/photo-1542190891-2093d38760f2?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          image="https://images.unsplash.com/photo-1683481554448-eeaf87df9729?q=80&w=2480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-        <ImageCard
-          artistName="Alex"
-          artistImage="https://images.unsplash.com/photo-1492288991661-058aa541ff43?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          image="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=2245&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-        <ImageCard
-          artistName="Chris"
-          artistImage="https://images.unsplash.com/photo-1579038773867-044c48829161?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          image="https://plus.unsplash.com/premium_photo-1711136314731-8c3fe1831672?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-        <ImageCard
-          artistName="Dany"
-          artistImage="https://images.unsplash.com/photo-1542190891-2093d38760f2?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          image="https://images.unsplash.com/photo-1683481554448-eeaf87df9729?q=80&w=2480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-        <ImageCard
-          artistName="Alex"
-          artistImage="https://images.unsplash.com/photo-1492288991661-058aa541ff43?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          image="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=2245&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-        <ImageCard
-          artistName="Chris"
-          artistImage="https://images.unsplash.com/photo-1579038773867-044c48829161?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          image="https://plus.unsplash.com/premium_photo-1711136314731-8c3fe1831672?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-        <ImageCard
-          artistName="Dany"
-          artistImage="https://images.unsplash.com/photo-1542190891-2093d38760f2?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          image="https://images.unsplash.com/photo-1683481554448-eeaf87df9729?q=80&w=2480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-        <ImageCard
-          artistName="Alex"
-          artistImage="https://images.unsplash.com/photo-1492288991661-058aa541ff43?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          image="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=2245&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-        <ImageCard
-          artistName="Chris"
-          artistImage="https://images.unsplash.com/photo-1579038773867-044c48829161?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          image="https://plus.unsplash.com/premium_photo-1711136314731-8c3fe1831672?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-        <ImageCard
-          artistName="Dany"
-          artistImage="https://images.unsplash.com/photo-1542190891-2093d38760f2?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          image="https://images.unsplash.com/photo-1683481554448-eeaf87df9729?q=80&w=2480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-      </View>
-    </ScrollView>
+
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        ItemSeparatorComponent={Separator}
+        numColumns={3} // number of columns in the grid
+        columnWrapperStyle={styles.row}
+      />
+    </View>
   );
 }
 
@@ -92,7 +115,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     flexWrap: "wrap",
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   searchBar: {
     borderStyle: "solid",
@@ -102,5 +125,19 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#efefef",
     borderRadius: 6,
+  },
+  separator: {
+    height: 10,
+    width: 10,
+    backgroundColor: "white",
+  },
+  row: {
+    flex: 1,
+    // justifyContent: "space-between",
+    marginBottom: 10, // Space between rows
+  },
+  itemWrapper: {
+    flex: 1,
+    margin: 5, // Space between columns
   },
 });
