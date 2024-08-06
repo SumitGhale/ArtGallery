@@ -19,8 +19,5 @@ web-build/
 expo-env.d.ts
 # @end expo-cli
 
-config.ts
-
-config.ts
-
- config.ts
+ config/Config.ts
+# firebase config
