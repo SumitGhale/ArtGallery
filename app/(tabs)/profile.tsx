@@ -1,20 +1,75 @@
-import { Image, ScrollView, StyleSheet, Text, View, Pressable } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  FlatList,
+} from "react-native";
 import { signOut } from "@firebase/auth";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "@/Contexts/AuthContext";
+import { DBContext } from "@/Contexts/dbContext";
 import { router, useRouter } from "expo-router";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 
 export default function Profile() {
   const auth = useContext(AuthContext);
-  const router = useRouter()
+  const router = useRouter();
+  const db = useContext(DBContext);
+  const [data, setData] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (loaded == false) {
+      getYourPosts();
+      setLoaded(true);
+    }
+  }, []);
+
   const signout = () => {
-    signOut(auth).then(() => {
-      // Sign-out successful.
-      router.replace("/")
-    }).catch((error) => {
-      // An error happened.
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        router.replace("/");
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
+
+  const getYourPosts = () => {
+    const path = "posts";
+    const q = query(
+      collection(db, path),
+      where("userID", "==", "user@mailinator.com")
+    );
+    const unsub = onSnapshot(q, (querySnapshot) => {
+      let items: any = [];
+      querySnapshot.forEach((doc) => {
+        let item = doc.data();
+        item.id = doc.id;
+        items.push(item);
+      });
+      setData(items);
     });
-  }
+  };
+
+  const ListItem = (props: any) => {
+    return (
+      <Image
+        style={styles.post}
+        source={{
+          uri: props.postImage,
+        }}
+      />
+    );
+  };
+
+  const renderItem = ({ item }: any) => {
+    return <ListItem postImage={item.imageURL} />;
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -42,62 +97,12 @@ export default function Profile() {
         <Text style={{ fontSize: 18 }}>100K Likes</Text>
       </View>
 
+      {/*   user posts    */}
+
       <View style={styles.postContainer}>
-        <Image
-          style={styles.post}
-          source={{
-            uri: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=2245&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          }}
-        />
-        <Image
-          style={styles.post}
-          source={{
-            uri: "https://plus.unsplash.com/premium_photo-1711136314731-8c3fe1831672?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          }}
-        />
-        <Image
-          style={styles.post}
-          source={{
-            uri: "https://images.unsplash.com/photo-1683481554448-eeaf87df9729?q=80&w=2480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          }}
-        />
-        <Image
-          style={styles.post}
-          source={{
-            uri: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=2245&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          }}
-        />
-        <Image
-          style={styles.post}
-          source={{
-            uri: "https://plus.unsplash.com/premium_photo-1711136314731-8c3fe1831672?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          }}
-        />
-        <Image
-          style={styles.post}
-          source={{
-            uri: "https://images.unsplash.com/photo-1683481554448-eeaf87df9729?q=80&w=2480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          }}
-        />
-        <Image
-          style={styles.post}
-          source={{
-            uri: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=2245&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          }}
-        />
-        <Image
-          style={styles.post}
-          source={{
-            uri: "https://plus.unsplash.com/premium_photo-1711136314731-8c3fe1831672?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          }}
-        />
-        <Image
-          style={styles.post}
-          source={{
-            uri: "https://images.unsplash.com/photo-1683481554448-eeaf87df9729?q=80&w=2480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          }}
-        />
+        <FlatList data={data} renderItem={renderItem} numColumns={3} />
       </View>
+
       <Pressable style={styles.button} onPress={signout}>
         <Text style={styles.buttonText}> Sign out</Text>
       </Pressable>
@@ -147,6 +152,8 @@ const styles = StyleSheet.create({
     height: 125,
     width: 100,
     marginBottom: 10,
+    marginRight: 10,
+    flex: 1,
   },
   button: {
     marginTop: 20,

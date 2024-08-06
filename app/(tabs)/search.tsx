@@ -1,10 +1,8 @@
 import ImageCard from "@/components/ImageCards";
 import { useContext, useState, useEffect } from "react";
 import {
-  ScrollView,
   StyleSheet,
   View,
-  TextInput,
   FlatList,
 } from "react-native";
 import { lightColors, SearchBar } from "@rneui/themed";
@@ -13,7 +11,6 @@ import {
   collection,
   onSnapshot,
   query,
-  QuerySnapshot,
   where,
 } from "firebase/firestore";
 
@@ -42,7 +39,6 @@ export default function search() {
         items.push(item);
       });
       setData(items); //  setting data to the state items
-      console.log(items);
     });
   };
 

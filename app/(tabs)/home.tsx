@@ -8,7 +8,6 @@ import {
 } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { DBContext } from "@/Contexts/dbContext";
-import { AuthContext } from "@/Contexts/AuthContext";
 
 export default function home() {
   const db = useContext(DBContext);
@@ -34,7 +33,6 @@ export default function home() {
         items.push(item);
       });
       setData(items);
-      console.log(items)
     });
   };
 
