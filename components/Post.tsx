@@ -1,7 +1,10 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useRouter } from "expo-router";
 
 export default function Post(props: any) {
+  const router = useRouter();
+
   return (
     <View>
       <View style={styles.userInfo}>
@@ -18,12 +21,22 @@ export default function Post(props: any) {
         </View>
       </View>
       <Image style={styles.postImage} source={{ uri: props.postImage }} />
-      <View style = {styles.icons}>
+      <View style={styles.icons}>
         <FontAwesome name="heart" size={24} color="red" />
-        <FontAwesome name="comment" size={24} color="black" />
+        <FontAwesome
+          name="comment"
+          size={24}
+          color="black"
+          onPress={() =>
+            router.push({
+              pathname: "addComment/[post_id]",
+              params: { post_id: props.id },
+            })
+          }
+        />
         <FontAwesome name="share-alt" size={24} color="black" />
       </View>
-      <Text style = {{marginBottom: 15}}>8M Likes 756K Comments</Text>
+      <Text style={{ marginVertical: 15 }}>8M Likes 756K Comments</Text>
     </View>
   );
 }
@@ -32,7 +45,7 @@ const styles = StyleSheet.create({
   profileImage: {
     height: 40,
     width: 40,
-    objectFit: "cover"
+    objectFit: "cover",
   },
   userInfo: {
     flexDirection: "row",
@@ -42,8 +55,8 @@ const styles = StyleSheet.create({
     height: 400,
     marginVertical: 10,
   },
-  icons:{
-    flexDirection:"row",
-    gap: 10,
-  }
+  icons: {
+    flexDirection: "row",
+    gap: 20,
+  },
 });

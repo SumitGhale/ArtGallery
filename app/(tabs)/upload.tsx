@@ -34,19 +34,9 @@ export default function Upload() {
   const [postDescription, setPostDescription] = useState("");
   const [postSearchTags, setSearchtags] = useState("");
 
-  //  get the tags string and put them on array
-  var tags = postSearchTags.split(" ")
-
-  //  reset textfields
-
-  const resetTextFields = () =>{
-    setImageSelected("https://img.freepik.com/free-vector/landing-page-template-design-business-websides_52683-22971.jpg")
-    setPostTitle("")
-    setPostDescription("")
-    setSearchtags("")
-  }
   //  Access camera using expo image picker
   const pickcameraImageAsync = async () => {
+    console.log("i am here");
     let result = await ImagePicker.launchCameraAsync({
       cameraType: ImagePicker.CameraType.front,
       allowsEditing: true,
@@ -62,6 +52,13 @@ export default function Upload() {
       alert("you did not select any image.");
     }
   };
+
+  const resetFields = () =>{
+    setImageSelected("https://img.freepik.com/free-vector/landing-page-template-design-business-websides_52683-22971.jpg")
+    setPostTitle("")
+    setPostDescription("")
+    setSearchtags("")
+  }
 
   //  Access gallery using expo image picker
   const pickGallerymageAsync = async () => {
@@ -85,7 +82,7 @@ export default function Upload() {
       title: postTitle,
       description: postDescription,
       imageURL: selectedImage,
-      tags: tags,
+      tags: ["sunset", "mountains"],
       userID: auth.currentUser.email,
       likes: ["user1", "user2"],
       createdAt: new Date(),
@@ -95,11 +92,11 @@ export default function Upload() {
     try {
       const path = `posts`;
       const docRef = await addDoc(collection(db, path), Post);
+      resetFields()
       alert("Post uploaded successfully !!!.");
     } catch (e: any) {
       alert(`Error adding documennt: ${e.errorMessage}`);
     }
-    resetTextFields()
   };
 
   console.log(modalIsOpen);

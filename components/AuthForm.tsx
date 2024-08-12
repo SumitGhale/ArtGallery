@@ -1,12 +1,14 @@
 import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
 export default function AuthForm(props: any) {
-
   const [email, setEmail] = useState("user@mailinator.com");
   const [password, setPassword] = useState("12345678");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState("");
+
   const [validInput, setInputAsValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+
 
   const [emailTouched, setEmailTouched] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
@@ -44,68 +46,83 @@ export default function AuthForm(props: any) {
     setErrorMessage("");
   }
 
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}> {props.title}</Text>
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}> {props.title}</Text>
 
-        <Text> Email </Text>
-        <TextInput
-          inputMode="email"
-          placeholder="Username or email"
-          style={styles.input}
-          value={email}
-          onChangeText={(text) => {
-            setEmail(text);
-            setEmailTouched(true);
-          }}
-        />
+      {props.actionText === "SignUp" && (
+        <View>
+          <Text> User Name </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Username"
+            value={username}
+            onChangeText={(text) => {
+              setUsername(text)
+            }}
+            secureTextEntry={false}
+          />
+        </View>
+      )}
 
-        <Text> Password </Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={(text) => {
-            setPassword(text);
-            setPasswordTouched(true);
-          }}
-          secureTextEntry={false}
-        />
+      <Text> Email </Text>
+      <TextInput
+        inputMode="email"
+        placeholder="Username or email"
+        style={styles.input}
+        value={email}
+        onChangeText={(text) => {
+          setEmail(text);
+          setEmailTouched(true);
+        }}
+      />
 
-        {props.actionText === "SignUp" && (
-          <View>
-            <Text> Confirm Password </Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Re-enter password"
-              value={confirmPassword}
-              onChangeText={(text) => {
-                setConfirmPassword(text);
-                setConfirmPasswordTouched(true);
-              }}
-              secureTextEntry={false}
-            />
-          </View>
-        )}
+      <Text> Password </Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={(text) => {
+          setPassword(text);
+          setPasswordTouched(true);
+        }}
+        secureTextEntry={false}
+      />
 
-        <Text style={styles.error}>{errorMessage}</Text>
+      {props.actionText === "SignUp" && (
+        <View>
+          <Text> Confirm Password </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Re-enter password"
+            value={confirmPassword}
+            onChangeText={(text) => {
+              setConfirmPassword(text);
+              setConfirmPasswordTouched(true);
+            }}
+            secureTextEntry={false}
+          />
+        </View>
+      )}
 
-        <Pressable
-          style={validInput ? styles.button : styles.buttonDisabled}
-          onPress={() => {
-            props.action(email, password);
-            console.log(password + " " + confirmPassword);
-          }}
+      <Text style={styles.error}>{errorMessage}</Text>
+
+      <Pressable
+        style={validInput ? styles.button : styles.buttonDisabled}
+        onPress={() => {
+          props.action(email, password, username);
+          console.log(password + " " + confirmPassword);
+        }}
+      >
+        <Text
+          style={validInput ? styles.buttonText : styles.buttonDisabledText}
         >
-          <Text
-            style={validInput ? styles.buttonText : styles.buttonDisabledText}
-          >
-            {props.actionText}
-          </Text>
-        </Pressable>
-      </View>
-    );
-  }
+          {props.actionText}
+        </Text>
+      </Pressable>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -135,7 +152,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 13,
     paddingVertical: 15,
     borderRadius: 5,
-    alignItems: "center"
+    alignItems: "center",
   },
   buttonText: {
     color: "#efefef",

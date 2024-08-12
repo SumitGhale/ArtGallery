@@ -6,13 +6,15 @@ import {
   View,
   Pressable,
   FlatList,
+  SafeAreaView,
 } from "react-native";
 import { signOut } from "@firebase/auth";
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "@/Contexts/AuthContext";
 import { DBContext } from "@/Contexts/dbContext";
-import { router, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { TouchableOpacity } from "react-native";
 
 export default function Profile() {
   const auth = useContext(AuthContext);
@@ -58,55 +60,66 @@ export default function Profile() {
 
   const ListItem = (props: any) => {
     return (
-      <Image
-        style={styles.post}
-        source={{
-          uri: props.postImage,
+      <TouchableOpacity
+        onPress={() => {
+          router.push({
+            pathname: "editPost/[itemID]",
+            params: { itemID: props.id },
+          });
         }}
-      />
+      >
+        <Image
+          style={styles.post}
+          source={{
+            uri: props.postImage,
+          }}
+        />
+      </TouchableOpacity>
     );
   };
 
   const renderItem = ({ item }: any) => {
-    return <ListItem postImage={item.imageURL} />;
+    return <ListItem postImage={item.imageURL} id={item.id} />;
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Image
-        style={styles.coverImage}
-        source={{
-          uri: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        }}
-      />
-      <Image
-        style={styles.profileImage}
-        source={{
-          uri: "https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=800",
-        }}
-      />
-      <Text style={{ fontWeight: "bold", fontSize: 22, textAlign: "center" }}>
-        Amelia
-      </Text>
-      <Text style={{ fontWeight: 400, fontSize: 18, textAlign: "center" }}>
-        Digital artist / Photographer
-      </Text>
+    <SafeAreaView style = {{flex :1}}>
+      <ScrollView style={styles.container}>
+        <Image
+          style={styles.coverImage}
+          source={{
+            uri: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          }}
+        />
+        <Image
+          style={styles.profileImage}
+          source={{
+            uri: "https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=800",
+          }}
+        />
+        <Text style={{ fontWeight: "bold", fontSize: 22, textAlign: "center" }}>
+          Amelia
+        </Text>
+        <Text style={{ fontWeight: 400, fontSize: 18, textAlign: "center" }}>
+          Digital artist / Photographer
+        </Text>
 
-      <View style={styles.postInfo}>
-        <Text style={styles.postInfotext}>400 Posts</Text>
-        <Text style={{ fontSize: 18 }}>100K Likes</Text>
-      </View>
+        <View style={styles.postInfo}>
+          <Text style={styles.postInfotext}>400 Posts</Text>
+          <Text style={{ fontSize: 18 }}>100K Likes</Text>
+        </View>
 
-      {/*   user posts    */}
+        {/*   user posts    */}
 
-      <View style={styles.postContainer}>
-        <FlatList data={data} renderItem={renderItem} numColumns={3} />
-      </View>
+        <View style={styles.postContainer}>
+          <FlatList data={data} renderItem={renderItem} numColumns={3} />
+        </View>
 
-      <Pressable style={styles.button} onPress={signout}>
-        <Text style={styles.buttonText}> Sign out</Text>
-      </Pressable>
-    </ScrollView>
+        <Pressable style={styles.button} onPress={signout}>
+          <Text style={styles.buttonText}> Sign out</Text>
+        </Pressable>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -143,17 +156,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   postContainer: {
-    padding: 10,
+    margin: 10,
+    flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
   },
   post: {
-    height: 125,
-    width: 100,
+    minHeight: 125,
+    minWidth: 100,
+    flex: 1,
     marginBottom: 10,
     marginRight: 10,
-    flex: 1,
   },
   button: {
     marginTop: 20,

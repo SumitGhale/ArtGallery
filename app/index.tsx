@@ -31,8 +31,8 @@ export default function Login() {
       <Text style={{ color: "#cc0000" }}>{error && error}</Text>
 
       <AuthForm title="Login" actionText="Login" action={signIn} />
-      <Pressable style={styles.button} onPress={() => router.push("./signUp")}>
-        <Text style={styles.buttonText}> Sign up</Text>
+      <Pressable style={styles.signUpbutton} onPress={() => router.push("./signUp")}>
+        <Text style={styles.buttonText}> Don't have an account? sign up</Text>
       </Pressable>
     </ScrollView>
   );
@@ -42,17 +42,16 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#EAEAEA",
   },
-  button: {
-    marginTop: 20,
-    backgroundColor: "#FF2E63",
-    marginHorizontal: 13,
-    paddingVertical: 15,
+  signUpbutton: {
+    marginBottom: 15,
+    marginRight: 60,
     borderRadius: 5,
-    alignItems: "center",
+
   },
   buttonText: {
-    color: "#efefef",
-    textAlign: "center",
-    padding: 8,
+    color: "#FF2E63",
+    textAlign: "right",
+    fontSize: 12,
+    fontWeight: 600
   },
 });
