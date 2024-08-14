@@ -71,6 +71,6 @@ const styles = StyleSheet.create({
     color: "#FF2E63",
     textAlign: "right",
     fontSize: 12,
-    fontWeight: 600,
+    // fontWeight: 600,
   },
 });
