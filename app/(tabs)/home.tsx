@@ -5,18 +5,21 @@ import {
   View,
   FlatList,
   SafeAreaView,
+  ActivityIndicator,
 } from "react-native";
 import Post from "@/components/Post";
-import { ScrollView } from "react-native";
-import { collection, query, onSnapshot } from "firebase/firestore";
+import { collection, query, onSnapshot, doc, getDoc } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { DBContext } from "@/Contexts/dbContext";
+import { AuthContext } from "@/Contexts/AuthContext";
 
 export default function home() {
   const db = useContext(DBContext);
+  const auth = useContext(AuthContext);
 
+  const [userData, setUserData] = useState <any> ();
   const [data, setData] = useState([]);
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded]= useState(false);
 
   useEffect(() => {
     if (loaded == false) {
@@ -67,7 +70,7 @@ export default function home() {
   };
 
   return (
-    <SafeAreaView style={{flex:1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         <Image
           source={require("../../assets/images/3-removebg-preview.png")}
@@ -87,7 +90,7 @@ export default function home() {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     // paddingVertical: 10,
     paddingHorizontal: 12,
     backgroundColor: "#EAEAEA",
@@ -96,5 +99,10 @@ const styles = StyleSheet.create({
   separator: {
     height: 10,
     backgroundColor: "#EAEAEA",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

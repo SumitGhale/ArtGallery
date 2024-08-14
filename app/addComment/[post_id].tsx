@@ -121,7 +121,7 @@ export default function CommentItem() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    // padding: 10,
   },
   comment: {
     flexDirection: "row",

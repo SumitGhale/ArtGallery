@@ -1,6 +1,6 @@
-import { DBContext } from "@/Contexts/dbContext"
-import { useLocalSearchParams, useNavigation } from "expo-router"
-import { useContext, useEffect, useState } from "react"
+import { DBContext } from "@/Contexts/dbContext";
+import { useLocalSearchParams, useNavigation } from "expo-router";
+import { useContext, useEffect, useState } from "react";
 import {
   TextInput,
   StyleSheet,
@@ -9,8 +9,9 @@ import {
   Image,
   Pressable,
   Text,
-} from "react-native"
-import { doc, getDoc, deleteDoc, updateDoc } from "@firebase/firestore"
+  SafeAreaView,
+} from "react-native";
+import { doc, getDoc, deleteDoc, updateDoc } from "@firebase/firestore";
 
 export default function ItemPost(props: any) {
   const db = useContext(DBContext);
@@ -22,68 +23,75 @@ export default function ItemPost(props: any) {
   const [postDescription, setPostDescription] = useState("");
 
   const getDocument = async (document: string) => {
-    const docRef = doc(db, "posts", itemID)
-    const docSnap = await getDoc(docRef)
+    const docRef = doc(db, "posts", itemID);
+    const docSnap = await getDoc(docRef);
     setDocument(docSnap.data());
   };
 
   const resetTextField = () => {
-    setPostTitle("")
-    setPostDescription("")
-  }
+    setPostTitle("");
+    setPostDescription("");
+  };
 
-  const updateDocumen = async () =>{
-    {const docRef = doc(db, "posts", itemID)
+  const updateDocumen = async () => {
+    const docRef = doc(db, "posts", itemID);
     const updateData = {
-        title: postTitle ? postTitle : documennt.title,
-        description: postDescription ? postDescription : documennt.description
-    }
-    await updateDoc(docRef, updateData)
-    navigation.goBack()
-    alert("Update successfull")}
-  }
+      title: postTitle ? postTitle : documennt.title,
+      description: postDescription ? postDescription : documennt.description,
+    };
+    await updateDoc(docRef, updateData);
+    navigation.goBack();
+    alert("Update successfull");
+  };
 
-  const deleteDocument = async(documentId: string) =>{
-    const docRef = doc(db, "posts", itemID)
-    const delDoc = await deleteDoc(docRef)
-    navigation.goBack()
-  }
+  const deleteDocument = async (documentId: string) => {
+    const docRef = doc(db, "posts", itemID);
+    const delDoc = await deleteDoc(docRef);
+    navigation.goBack();
+  };
 
   useEffect(() => {
-    navigation.setOptions({ headerShown: true, title: "Update Post" })
+    navigation.setOptions({ headerShown: true, title: "Update Post" });
     getDocument(itemID);
-  }, [navigation])
+  }, [navigation]);
 
   return documennt ? (
-    <ScrollView>
-      <Image
-        style={styles.coverImage}
-        source={{
-          uri: documennt.imageURL,
-        }}
-      />
-      <TextInput
-        placeholder={documennt.title}
-        style={styles.input}
-        value={postTitle}
-        onChangeText={(text) => setPostTitle(text)}
-      />
+    <SafeAreaView>
+      <ScrollView>
+        <Image
+          style={styles.coverImage}
+          source={{
+            uri: documennt.imageURL,
+          }}
+        />
+        <TextInput
+          placeholder={documennt.title}
+          style={styles.input}
+          value={postTitle}
+          onChangeText={(text) => setPostTitle(text)}
+        />
 
-      <TextInput
-        placeholder={documennt.description}
-        style={styles.input}
-        value={postDescription}
-        onChangeText={(text) => setPostDescription(text)}
-      />
+        <TextInput
+          placeholder={documennt.description}
+          style={styles.input}
+          value={postDescription}
+          onChangeText={(text) => setPostDescription(text)}
+        />
 
-      <Pressable style={styles.button} onPress={() => {updateDocumen()}}>
-        <Text style={{ color: "white", textAlign: "center" }}>Update</Text>
-      </Pressable>
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            updateDocumen();
+          }}
+        >
+          <Text style={{ color: "white", textAlign: "center" }}>Update</Text>
+        </Pressable>
 
-      <Pressable style={styles.button} onPress={() => deleteDocument(itemID)}>
-        <Text style={{ color: "white", textAlign: "center" }}>Delete</Text>
-      </Pressable>
-    </ScrollView>
+        <Pressable style={styles.button} onPress={() => deleteDocument(itemID)}>
+          <Text style={{ color: "white", textAlign: "center" }}>Delete</Text>
+        </Pressable>
+      </ScrollView>
+    </SafeAreaView>
   ) : null;
 }
 

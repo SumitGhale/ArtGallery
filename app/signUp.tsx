@@ -6,7 +6,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
 } from "@firebase/auth";
-import { collection, addDoc } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 import { router } from "expo-router";
 import { DBContext } from "@/Contexts/dbContext";
 
@@ -24,10 +24,10 @@ export default function SignUp() {
     };
     try {
       const path = `users/${auth.currentUser.uid}`;
-      const docRef = await addDoc(collection(db, path), user);
+      const docRef = await setDoc(doc(db, path), user);
       alert("user added");
     } catch (e: any) {
-      alert("user could not be added " + e.errorMessage);
+      alert("user could not be added " + e.errorMessage + e.code);
     }
   };
 
@@ -37,11 +37,11 @@ export default function SignUp() {
     password: string,
     name: string
   ) => {
-    try{
-        await createUserWithEmailAndPassword(auth, email, password)
-        await createUser(email, name);
-    }catch(e:any){
-        setError((e.code = " " + e.message));
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      await createUser(email, name);
+    } catch (e: any) {
+      setError((e.code = " " + e.message));
     }
   };
 

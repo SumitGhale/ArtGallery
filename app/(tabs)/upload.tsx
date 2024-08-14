@@ -78,11 +78,12 @@ export default function Upload() {
   };
 
   const addPost = async () => {
+    let tagsArray: string[] = postSearchTags.split(" ")
     const Post = {
       title: postTitle,
       description: postDescription,
       imageURL: selectedImage,
-      tags: ["sunset", "mountains"],
+      tags: tagsArray,
       userID: auth.currentUser.email,
       likes: ["user1", "user2"],
       createdAt: new Date(),

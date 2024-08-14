@@ -14,8 +14,7 @@ export default function Post(props: any) {
         />
         <View>
           <Text style={{ fontWeight: 600, fontSize: 18 }}>
-            {" "}
-            {props.username}{" "}
+            {props.username}
           </Text>
           <Text> {props.caption} </Text>
         </View>

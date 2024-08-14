@@ -1,7 +1,7 @@
 import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
 export default function AuthForm(props: any) {
-  const [email, setEmail] = useState("user@mailinator.com");
+  const [email, setEmail] = useState("Ram@mailinator.com");
   const [password, setPassword] = useState("12345678");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");

@@ -13,7 +13,14 @@ import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "@/Contexts/AuthContext";
 import { DBContext } from "@/Contexts/dbContext";
 import { useRouter } from "expo-router";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  query,
+  where,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { TouchableOpacity } from "react-native";
 
 export default function Profile() {
@@ -22,13 +29,15 @@ export default function Profile() {
   const db = useContext(DBContext);
   const [data, setData] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const [userData, setUserData] = useState<any>();
 
   useEffect(() => {
     if (loaded == false) {
+      fetchUserData();
       getYourPosts();
       setLoaded(true);
     }
-  }, []);
+  }, [userData, data]);
 
   const signout = () => {
     signOut(auth)
@@ -45,7 +54,7 @@ export default function Profile() {
     const path = "posts";
     const q = query(
       collection(db, path),
-      where("userID", "==", "user@mailinator.com")
+      where("userID", "==", auth.currentUser.email)
     );
     const unsub = onSnapshot(q, (querySnapshot) => {
       let items: any = [];
@@ -56,6 +65,19 @@ export default function Profile() {
       });
       setData(items);
     });
+  };
+
+  const fetchUserData = async () => {
+    const docRef = doc(db, "users", auth.currentUser.uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      setUserData(docSnap.data());
+      console.log(userData);
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+    }
   };
 
   const ListItem = (props: any) => {
@@ -83,7 +105,7 @@ export default function Profile() {
   };
 
   return (
-    <SafeAreaView style = {{flex :1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
         <Image
           style={styles.coverImage}
@@ -98,7 +120,7 @@ export default function Profile() {
           }}
         />
         <Text style={{ fontWeight: "bold", fontSize: 22, textAlign: "center" }}>
-          Amelia
+          {userData?.userName || "Unknown"}
         </Text>
         <Text style={{ fontWeight: 400, fontSize: 18, textAlign: "center" }}>
           Digital artist / Photographer

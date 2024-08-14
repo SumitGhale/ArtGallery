@@ -6,7 +6,7 @@ export default function ImageCard(props: any) {
       <Image style={styles.image} source={{ uri: props.image }} />
       <View style={styles.artistInfo}>
         <Image style={styles.artistImage} source={{ uri: props.artistImage }} />
-        <Text> {props.artistName} </Text>
+        <Text> Artist </Text>
       </View>
     </View>
   );
